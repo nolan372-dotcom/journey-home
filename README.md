@@ -1,6 +1,6 @@
-# Foster Coordination Tool — Take Me Home Pet Rescue
+# Foster Coordination Tool — Journey Home
 
-A focused web app that helps **Take Me Home Pet Rescue** (Richardson, TX) answer one question that trips up every foster-based rescue: *who is available to foster right now, and where is each animal?* It replaces the spreadsheet-and-group-text workflow with a single live view: a roster of foster homes, a roster of animals, and a placement dashboard that shows who has which animal, blocks over-capacity placements, and updates instantly when a placement starts or ends.
+A focused web app that helps **Journey Home** (Richardson, TX) answer one question that trips up every foster-based rescue: *who is available to foster right now, and where is each animal?* It replaces the spreadsheet-and-group-text workflow with a single live view: a roster of foster homes, a roster of animals, and a placement dashboard that shows who has which animal, blocks over-capacity placements, and updates instantly when a placement starts or ends.
 
 **Stack:** PHP 8.2 · CodeIgniter 4 · MySQL · Tailwind CSS (CDN) · CodeIgniter Shield
 

@@ -1,13 +1,13 @@
 # PROJECT.md — Foster Coordination Tool
 
-*A web app that helps a real foster-based animal rescue track which foster homes are available and where every animal is placed. Built for Take Me Home Pet Rescue (Richardson, TX).*
+*A web app that helps a real foster-based animal rescue track which foster homes are available and where every animal is placed. Built for Journey Home (Richardson, TX).*
 
 ---
 
 ## At a glance
 
 - **What:** A focused web app replacing the spreadsheet-and-group-text chaos a foster-based rescue uses to track foster availability and animal placements.
-- **For:** Take Me Home Pet Rescue — a small, all-volunteer, foster-based rescue in the Dallas area.
+- **For:** Journey Home — a small, all-volunteer, foster-based rescue in the Dallas area.
 - **Stack:** PHP 8.1+ · CodeIgniter 4 (MVC) · MySQL · Tailwind CSS · CodeIgniter Shield (auth) · deployed live.
 - **Why it matters:** A real-world problem for a real local nonprofit — not a tutorial to-do app. Designed with the rescue's actual workflow in mind.
 
@@ -28,7 +28,7 @@ Existing shelter software either doesn't solve this coordination layer well or i
 
 ## Who it's for
 
-The first user and design partner is **Take Me Home Pet Rescue** (Richardson, TX) — a small, foster-based, volunteer-run rescue, exactly the profile that feels this problem most. The primary user is the **foster coordinator**, the person currently holding all of this together by hand. (Support for multiple coordinators with their own logins is a planned future direction — see below.)
+The first user and design partner is **Journey Home** (Richardson, TX) — a small, foster-based, volunteer-run rescue, exactly the profile that feels this problem most. The primary user is the **foster coordinator**, the person currently holding all of this together by hand. (Support for multiple coordinators with their own logins is a planned future direction — see below.)
 
 ## What the app does (V1)
 
@@ -75,7 +75,7 @@ PHP 8.1+ with **CodeIgniter 4** (server-rendered MVC), **MySQL** for the databas
 
 *Realistic-scope note:* hitting a polished, deployed build by Monday means prioritizing the core (Phases 1–5 in the implementation plan: scaffold → database → fosters → animals → placements/dashboard). Login (Phase 6) and live deploy (Phase 7) are next in priority if time allows; if Monday arrives first, a locally running demo with seed data still tells the whole story.
 
-**Real-world adoption — after Monday, on the rescue's schedule.** Validating the workflow with Take Me Home Pet Rescue and getting a coordinator to use it on real data (Phases 0 and 8) depends on a third party and can't be compressed into the weekend. This is the milestone that turns "an app I built" into "an app a Dallas rescue uses" — worth pursuing, just not deadline-bound.
+**Real-world adoption — after Monday, on the rescue's schedule.** Validating the workflow with Journey Home and getting a coordinator to use it on real data (Phases 0 and 8) depends on a third party and can't be compressed into the weekend. This is the milestone that turns "an app I built" into "an app a Dallas rescue uses" — worth pursuing, just not deadline-bound.
 
 ## Future direction
 
