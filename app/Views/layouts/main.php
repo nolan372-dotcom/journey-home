@@ -19,12 +19,12 @@
     </script>
     <?= $this->renderSection('head') ?>
 </head>
-<body class="bg-stone-50 text-stone-800 min-h-screen font-sans antialiased">
+<body class="bg-stone-50 text-stone-800 min-h-screen font-sans antialiased m-0">
 
 <nav class="bg-stone-900 border-b border-stone-800">
     <div class="max-w-5xl mx-auto px-5 py-0 flex items-center justify-between h-14">
         <a href="/" class="flex items-center gap-2.5">
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500 text-stone-900 font-bold text-sm leading-none">T</span>
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-orange-500 text-stone-900 font-bold text-sm leading-none">T</span>
             <span class="text-white font-semibold text-sm tracking-tight">Take Me Home Pet Rescue</span>
         </a>
         <div class="flex items-center gap-1">
@@ -43,8 +43,8 @@
 <main class="max-w-5xl mx-auto px-5 py-8">
 
     <?php if (session()->getFlashdata('success')): ?>
-        <div class="mb-6 flex items-center gap-3 rounded-lg bg-emerald-50 border border-emerald-200 px-4 py-3 text-emerald-800 text-sm font-medium">
-            <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+        <div class="mb-6 flex items-center gap-3 rounded-lg bg-orange-50 border border-orange-200 px-4 py-3 text-orange-800 text-sm font-medium">
+            <svg class="w-4 h-4 text-orange-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
             <?= esc(session()->getFlashdata('success')) ?>
         </div>
     <?php endif ?>

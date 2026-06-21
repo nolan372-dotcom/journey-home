@@ -21,12 +21,12 @@
         <div class="sm:col-span-2">
             <label for="a-name" class="block text-sm font-medium text-stone-700 mb-1.5">Name <span class="text-red-500">*</span></label>
             <input type="text" id="a-name" name="name" value="<?= esc($old['name'] ?? '') ?>" required
-                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
         </div>
 
         <div>
             <label for="a-species" class="block text-sm font-medium text-stone-700 mb-1.5">Species <span class="text-red-500">*</span></label>
-            <select id="a-species" name="species" required class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+            <select id="a-species" name="species" required class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
                 <?php foreach (['dog' => 'Dog', 'cat' => 'Cat', 'other' => 'Other'] as $val => $lbl): ?>
                     <option value="<?= $val ?>" <?= ($old['species'] ?? 'dog') === $val ? 'selected' : '' ?>><?= $lbl ?></option>
                 <?php endforeach ?>
@@ -36,12 +36,12 @@
         <div>
             <label for="a-breed" class="block text-sm font-medium text-stone-700 mb-1.5">Breed</label>
             <input type="text" id="a-breed" name="breed" value="<?= esc($old['breed'] ?? '') ?>" placeholder="e.g. Beagle mix"
-                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
         </div>
 
         <div>
             <label for="a-age" class="block text-sm font-medium text-stone-700 mb-1.5">Age Group</label>
-            <select id="a-age" name="age_group" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+            <select id="a-age" name="age_group" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
                 <?php foreach (['puppy/kitten' => 'Puppy / Kitten', 'young' => 'Young', 'adult' => 'Adult', 'senior' => 'Senior'] as $val => $lbl): ?>
                     <option value="<?= $val ?>" <?= ($old['age_group'] ?? 'adult') === $val ? 'selected' : '' ?>><?= $lbl ?></option>
                 <?php endforeach ?>
@@ -51,7 +51,7 @@
         <div>
             <label for="a-size" class="block text-sm font-medium text-stone-700 mb-1.5">Size</label>
             <select id="a-size" name="size" data-selected="<?= esc($old['size'] ?? 'medium') ?>"
-                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
                 <?php foreach (['small' => 'Small', 'medium' => 'Medium', 'large' => 'Large'] as $val => $lbl): ?>
                     <option value="<?= $val ?>" <?= ($old['size'] ?? 'medium') === $val ? 'selected' : '' ?>><?= $lbl ?></option>
                 <?php endforeach ?>
@@ -61,12 +61,12 @@
         <div>
             <label for="a-intake" class="block text-sm font-medium text-stone-700 mb-1.5">Intake Date <span class="text-red-500">*</span></label>
             <input type="date" id="a-intake" name="intake_date" value="<?= esc($old['intake_date'] ?? date('Y-m-d')) ?>" required
-                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
         </div>
 
         <div>
             <label for="a-status" class="block text-sm font-medium text-stone-700 mb-1.5">Status</label>
-            <select id="a-status" name="status" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+            <select id="a-status" name="status" class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
                 <option value="needs_foster" <?= ($old['status'] ?? 'needs_foster') === 'needs_foster' ? 'selected' : '' ?>>Needs foster</option>
                 <option value="in_foster"    <?= ($old['status'] ?? '') === 'in_foster'                ? 'selected' : '' ?>>In foster</option>
                 <option value="adopted"      <?= ($old['status'] ?? '') === 'adopted'                  ? 'selected' : '' ?>>Adopted</option>
@@ -78,18 +78,18 @@
                 Photo URL <span class="text-stone-400 font-normal">(optional)</span>
             </label>
             <input type="url" id="a-photo" name="photo_url" value="<?= esc($old['photo_url'] ?? '') ?>" placeholder="https://..."
-                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
         </div>
 
         <div class="sm:col-span-2">
             <label for="a-notes" class="block text-sm font-medium text-stone-700 mb-1.5">Notes</label>
             <textarea id="a-notes" name="notes" rows="3"
-                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400"><?= esc($old['notes'] ?? '') ?></textarea>
+                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400"><?= esc($old['notes'] ?? '') ?></textarea>
         </div>
     </div>
 
     <div class="flex gap-3 pt-2 border-t border-stone-100">
-        <button type="submit" class="rounded-lg bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors">
+        <button type="submit" class="rounded-lg bg-orange-600 px-5 py-2 text-sm font-semibold text-white hover:bg-orange-700 transition-colors">
             Save Animal
         </button>
         <a href="/animals" class="rounded-lg border border-stone-300 px-5 py-2 text-sm font-medium text-stone-700 hover:bg-stone-50 transition-colors">

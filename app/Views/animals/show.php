@@ -60,7 +60,7 @@
         <?php
             $colors = [
                 'needs_foster' => 'bg-orange-100 text-orange-800',
-                'in_foster'    => 'bg-emerald-100 text-emerald-800',
+                'in_foster'    => 'bg-orange-100 text-orange-800',
                 'adopted'      => 'bg-sky-100 text-sky-800',
             ];
             $labels = ['needs_foster' => 'Needs foster', 'in_foster' => 'In foster', 'adopted' => 'Adopted'];
@@ -70,15 +70,15 @@
         <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold <?= $color ?> mb-5"><?= $label ?></span>
 
         <?php if ($placement): ?>
-            <div class="rounded-lg bg-emerald-50 border border-emerald-200 p-4">
-                <p class="font-semibold text-emerald-900 text-sm"><?= esc($placement['foster_name']) ?></p>
-                <p class="text-emerald-700 text-xs mt-1">Since <?= esc($placement['start_date']) ?></p>
-                <p class="text-emerald-700 text-xs"><?= esc($placement['email']) ?> · <?= esc($placement['phone']) ?></p>
-                <a href="/fosters/<?= $placement['foster_id'] ?>" class="text-xs font-semibold text-emerald-700 hover:underline mt-2 inline-block">View foster home →</a>
+            <div class="rounded-lg bg-orange-50 border border-orange-200 p-4">
+                <p class="font-semibold text-orange-900 text-sm"><?= esc($placement['foster_name']) ?></p>
+                <p class="text-orange-700 text-xs mt-1">Since <?= esc($placement['start_date']) ?></p>
+                <p class="text-orange-700 text-xs"><?= esc($placement['email']) ?> · <?= esc($placement['phone']) ?></p>
+                <a href="/fosters/<?= $placement['foster_id'] ?>" class="text-xs font-semibold text-orange-700 hover:underline mt-2 inline-block">View foster home →</a>
             </div>
         <?php elseif ($animal['status'] === 'needs_foster'): ?>
             <p class="text-stone-400 text-sm">Not currently placed.
-                <a href="/" class="text-emerald-600 hover:underline">Go to dashboard to assign a foster.</a>
+                <a href="/" class="text-orange-600 hover:underline">Go to dashboard to assign a foster.</a>
             </p>
         <?php endif ?>
     </div>

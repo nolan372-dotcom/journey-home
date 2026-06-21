@@ -5,23 +5,23 @@
 
 <div class="flex items-center justify-between mb-5">
     <h1 class="text-xl font-semibold text-stone-900">Foster Homes</h1>
-    <a href="/fosters/new" class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors">
+    <a href="/fosters/new" class="inline-flex items-center gap-1.5 rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700 transition-colors">
         + Add Foster Home
     </a>
 </div>
 
 <form method="get" action="/fosters" class="mb-5 flex flex-wrap gap-2">
     <input type="text" name="q" value="<?= esc($filters['q']) ?>" placeholder="Search name, email or phone…"
-        class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 w-56">
+        class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 w-56">
 
-    <select name="species" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+    <select name="species" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
         <option value="">All species</option>
         <option value="both" <?= $filters['species'] === 'both' ? 'selected' : '' ?>>Dogs &amp; Cats</option>
         <option value="dog"  <?= $filters['species'] === 'dog'  ? 'selected' : '' ?>>Dogs only</option>
         <option value="cat"  <?= $filters['species'] === 'cat'  ? 'selected' : '' ?>>Cats only</option>
     </select>
 
-    <select name="status" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400">
+    <select name="status" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
         <option value="">All statuses</option>
         <option value="active"   <?= $filters['status'] === 'active'   ? 'selected' : '' ?>>Active</option>
         <option value="paused"   <?= $filters['status'] === 'paused'   ? 'selected' : '' ?>>Paused</option>
@@ -42,10 +42,10 @@
     <div class="rounded-lg border border-stone-200 bg-white px-5 py-10 text-center">
         <?php if ($anyFilter): ?>
             <p class="text-stone-400 text-sm">No foster homes match your search.</p>
-            <a href="/fosters" class="mt-3 inline-block text-xs font-semibold text-emerald-600 hover:text-emerald-700">Clear filters →</a>
+            <a href="/fosters" class="mt-3 inline-block text-xs font-semibold text-orange-600 hover:text-orange-700">Clear filters →</a>
         <?php else: ?>
             <p class="text-stone-400 text-sm">No foster homes yet.</p>
-            <a href="/fosters/new" class="mt-3 inline-block text-xs font-semibold text-emerald-600 hover:text-emerald-700">Add the first one →</a>
+            <a href="/fosters/new" class="mt-3 inline-block text-xs font-semibold text-orange-600 hover:text-orange-700">Add the first one →</a>
         <?php endif ?>
     </div>
 <?php else: ?>
@@ -65,7 +65,7 @@
             <?php foreach ($fosters as $f): ?>
             <tr class="hover:bg-stone-50 transition-colors">
                 <td class="px-4 py-3 font-medium">
-                    <a href="/fosters/<?= $f['id'] ?>" class="text-emerald-700 hover:text-emerald-800 hover:underline"><?= esc($f['name']) ?></a>
+                    <a href="/fosters/<?= $f['id'] ?>" class="text-orange-700 hover:text-orange-800 hover:underline"><?= esc($f['name']) ?></a>
                 </td>
                 <td class="px-4 py-3 text-stone-600">
                     <div><?= esc($f['email']) ?></div>
@@ -79,13 +79,13 @@
                 </td>
                 <td class="px-4 py-3">
                     <?php
-                        $colors = ['active' => 'bg-emerald-100 text-emerald-800', 'paused' => 'bg-amber-100 text-amber-800', 'inactive' => 'bg-stone-100 text-stone-500'];
+                        $colors = ['active' => 'bg-orange-100 text-orange-800', 'paused' => 'bg-amber-100 text-amber-800', 'inactive' => 'bg-stone-100 text-stone-500'];
                         $color = $colors[$f['status']] ?? 'bg-stone-100 text-stone-500';
                     ?>
                     <span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold <?= $color ?> capitalize"><?= esc($f['status']) ?></span>
                 </td>
                 <td class="px-4 py-3 text-right">
-                    <a href="/fosters/<?= $f['id'] ?>/edit?from=list" class="text-xs font-medium text-stone-400 hover:text-emerald-700 transition-colors">Edit</a>
+                    <a href="/fosters/<?= $f['id'] ?>/edit?from=list" class="text-xs font-medium text-stone-400 hover:text-orange-700 transition-colors">Edit</a>
                 </td>
             </tr>
             <?php endforeach ?>

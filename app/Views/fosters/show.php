@@ -33,7 +33,7 @@
     <div class="bg-white rounded-lg border border-stone-200 p-5 text-sm">
         <h2 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-4">Status</h2>
         <?php
-            $colors = ['active' => 'bg-emerald-100 text-emerald-800', 'paused' => 'bg-amber-100 text-amber-800', 'inactive' => 'bg-stone-100 text-stone-500'];
+            $colors = ['active' => 'bg-orange-100 text-orange-800', 'paused' => 'bg-amber-100 text-amber-800', 'inactive' => 'bg-stone-100 text-stone-500'];
             $color = $colors[$foster['status']] ?? 'bg-stone-100 text-stone-500';
         ?>
         <span class="inline-block rounded-full px-3 py-1 text-xs font-semibold <?= $color ?> mb-5 capitalize"><?= esc($foster['status']) ?></span>
@@ -73,7 +73,7 @@
             <?php foreach ($placements as $p): ?>
             <tr class="hover:bg-stone-50">
                 <td class="px-4 py-3 font-medium">
-                    <a href="/animals/<?= $p['animal_id'] ?>" class="text-emerald-700 hover:underline"><?= esc($p['name']) ?></a>
+                    <a href="/animals/<?= $p['animal_id'] ?>" class="text-orange-700 hover:underline"><?= esc($p['name']) ?></a>
                 </td>
                 <td class="px-4 py-3 text-stone-600 capitalize"><?= esc($p['species']) ?><?= $p['breed'] ? ' · ' . esc($p['breed']) : '' ?></td>
                 <td class="px-4 py-3 text-stone-600 capitalize"><?= esc($p['age_group']) ?> · <?= esc($p['size']) ?></td>
