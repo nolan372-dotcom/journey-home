@@ -12,14 +12,14 @@ class CoordinatorSeeder extends Seeder
         $users = auth()->getProvider();
 
         // Skip if this account already exists
-        if ($users->findByCredentials(['email' => 'nolanlee372@gmail.com']) !== null) {
+        if ($users->findByCredentials(['email' => 'admin@journeyhome.com']) !== null) {
             return;
         }
 
         $user = new User([
             'username' => 'coordinator',
-            'email'    => 'nolanlee372@gmail.com',
-            'password' => 'FosterCoord1!',
+            'email'    => 'admin@journeyhome.com',
+            'password' => 'JourneyHome!',
         ]);
 
         $users->save($user);
