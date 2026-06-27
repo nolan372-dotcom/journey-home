@@ -32,6 +32,7 @@ $routes->post('fosters',             'Fosters::create');
 $routes->get('fosters/(:num)',       'Fosters::show/$1');
 $routes->get('fosters/(:num)/edit',  'Fosters::edit/$1');
 $routes->post('fosters/(:num)',      'Fosters::update/$1');
-$routes->post('fosters/(:num)/status', 'Fosters::updateStatus/$1');
+$routes->post('fosters/(:num)/status',  'Fosters::updateStatus/$1');
+$routes->post('fosters/(:num)/delete',  'Fosters::destroy/$1');
 
 service('auth')->routes($routes);

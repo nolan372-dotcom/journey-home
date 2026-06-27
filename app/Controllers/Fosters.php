@@ -181,6 +181,30 @@ class Fosters extends BaseController
         return !empty($items) ? json_encode($items) : null;
     }
 
+    public function destroy($id)
+    {
+        $model = new FosterHome();
+        $foster = $model->find($id);
+
+        if (!$foster) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
+
+        $hasHistory = db_connect()
+            ->table('placements')
+            ->where('foster_home_id', $id)
+            ->countAllResults() > 0;
+
+        if ($hasHistory) {
+            return redirect()->to('/fosters/' . $id)
+                ->with('error', 'Cannot delete: this foster has placement history. Set their status to Inactive instead.');
+        }
+
+        $model->delete($id);
+
+        return redirect()->to('/fosters')->with('success', esc($foster['name']) . ' has been deleted.');
+    }
+
     public function updateStatus($id)
     {
         $model = new FosterHome();

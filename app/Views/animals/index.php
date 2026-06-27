@@ -152,7 +152,12 @@
                         <?php if ($a['photo_url']): ?>
                             <img src="<?= esc($a['photo_url']) ?>" alt="" class="h-8 w-8 rounded-full object-cover border border-stone-200">
                         <?php endif ?>
-                        <a href="/animals/<?= $a['id'] ?>" class="text-orange-700 hover:text-orange-800 hover:underline"><?= esc($a['name']) ?></a>
+                        <div>
+                            <a href="/animals/<?= $a['id'] ?>" class="text-orange-700 hover:text-orange-800 hover:underline"><?= esc($a['name']) ?></a>
+                            <?php if ($a['needs_medical'] || $a['needs_behavior'] || $a['needs_fenced_yard'] || $a['no_other_dogs'] || $a['no_dogs'] || $a['no_cats'] || $a['no_other_cats'] || $a['no_kids'] || $a['custom_needs']): ?>
+                            <span class="mt-0.5 block w-fit rounded-full bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-0.5">♥ Special needs</span>
+                            <?php endif ?>
+                        </div>
                     </div>
                 </td>
                 <td class="px-4 py-3 text-stone-600 capitalize">

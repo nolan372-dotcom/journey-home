@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title ?? 'Foster Coordinator') ?> — Take Me Home Pet Rescue</title>
     <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="shortcut icon" type="image/png" href="/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,7 +26,7 @@
 <nav class="bg-stone-900 border-b border-stone-800">
     <div class="max-w-5xl mx-auto px-5 py-0 flex items-center justify-between h-14">
         <a href="/" class="flex items-center gap-2.5">
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-orange-500 text-stone-900 font-bold text-sm leading-none">T</span>
+            <img src="/favicon.png" alt="" class="h-7 w-7 rounded-md">
             <span class="text-white font-semibold text-sm tracking-tight">Take Me Home Pet Rescue</span>
         </a>
         <div class="flex items-center gap-1">

@@ -5,15 +5,31 @@
     <a href="/fosters" class="text-xs font-medium text-stone-400 hover:text-stone-600 transition-colors">← Foster Homes</a>
 </div>
 
+<?php if (session()->getFlashdata('error')): ?>
+<div class="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-800 text-sm">
+    <?= esc(session()->getFlashdata('error')) ?>
+</div>
+<?php endif ?>
+
 <div class="flex items-start justify-between mb-7">
     <div>
         <h1 class="text-xl font-semibold text-stone-900"><?= esc($foster['name']) ?></h1>
         <p class="text-sm text-stone-500 mt-0.5"><?= esc($foster['email']) ?> · <?= esc($foster['phone']) ?></p>
     </div>
-    <a href="/fosters/<?= $foster['id'] ?>/edit"
-       class="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-50 transition-colors">
-        Edit
-    </a>
+    <div class="flex items-center gap-2">
+        <a href="/fosters/<?= $foster['id'] ?>/edit"
+           class="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-50 transition-colors">
+            Edit
+        </a>
+        <form action="/fosters/<?= $foster['id'] ?>/delete" method="post"
+              onsubmit="return confirm('Permanently delete <?= esc($foster['name'], 'attr') ?>? This cannot be undone.')">
+            <?= csrf_field() ?>
+            <button type="submit"
+                class="rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 hover:border-red-300 transition-colors">
+                Delete
+            </button>
+        </form>
+    </div>
 </div>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-7">
