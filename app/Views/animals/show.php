@@ -50,6 +50,24 @@
         <div class="flex justify-between"><span class="text-stone-400">Intake date</span><span class="text-stone-700"><?= esc($animal['intake_date']) ?></span></div>
         <div class="flex justify-between"><span class="text-stone-400">Age group</span><span class="text-stone-700 capitalize"><?= esc($animal['age_group']) ?></span></div>
         <div class="flex justify-between"><span class="text-stone-400">Size</span><span class="text-stone-700 capitalize"><?= esc($animal['size']) ?></span></div>
+        <?php
+            $needs = [];
+            if ($animal['needs_medical'])     $needs[] = 'Medical case';
+            if ($animal['needs_behavior'])    $needs[] = 'Behavior case';
+            if ($animal['needs_fenced_yard']) $needs[] = 'Requires fenced yard';
+            if ($animal['no_other_dogs'])     $needs[] = 'No other dogs';
+            if ($animal['no_dogs'])           $needs[] = 'No dogs';
+            if ($animal['no_cats'])           $needs[] = 'No cats';
+            if ($animal['no_other_cats'])     $needs[] = 'No other cats';
+            if ($animal['no_kids'])           $needs[] = 'No kids';
+        ?>
+        <?php
+            $custom = $animal['custom_needs'] ? json_decode($animal['custom_needs'], true) ?? [] : [];
+            $allNeeds = array_merge($needs, $custom);
+        ?>
+        <?php if ($allNeeds): ?>
+        <div class="flex justify-between items-start gap-4"><span class="text-stone-400 shrink-0">Special needs</span><span class="text-stone-700 text-right"><?= esc(implode(', ', $allNeeds)) ?></span></div>
+        <?php endif ?>
         <?php if ($animal['notes']): ?>
         <div class="pt-3 border-t border-stone-100 text-stone-600 text-xs leading-relaxed"><?= esc($animal['notes']) ?></div>
         <?php endif ?>

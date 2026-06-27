@@ -13,6 +13,9 @@ class FosterHome extends Model
         'name', 'email', 'phone', 'area_zip',
         'species_accepted', 'size_preference', 'max_capacity',
         'has_kids', 'has_other_pets', 'status', 'notes',
+        'ok_small', 'ok_medium', 'ok_large', 'ok_xlarge',
+        'ok_puppies', 'ok_kittens', 'ok_medical', 'ok_behavior', 'has_fenced_yard',
+        'custom_can_handle',
     ];
 
     protected $useTimestamps = true;

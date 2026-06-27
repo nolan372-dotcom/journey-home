@@ -14,7 +14,7 @@
     </div>
 <?php endif ?>
 
-<form action="/animals" method="post" class="bg-white rounded-lg border border-stone-200 p-6 space-y-5 max-w-2xl">
+<form action="/animals" method="post" enctype="multipart/form-data" class="bg-white rounded-lg border border-stone-200 p-6 space-y-5 max-w-2xl">
     <?= csrf_field() ?>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -74,11 +74,69 @@
         </div>
 
         <div class="sm:col-span-2">
-            <label for="a-photo" class="block text-sm font-medium text-stone-700 mb-1.5">
-                Photo URL <span class="text-stone-400 font-normal">(optional)</span>
+            <label class="block text-sm font-medium text-stone-700 mb-1.5">
+                Photo <span class="text-stone-400 font-normal">(optional)</span>
             </label>
-            <input type="url" id="a-photo" name="photo_url" value="<?= esc($old['photo_url'] ?? '') ?>" placeholder="https://..."
-                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+            <div class="flex items-center gap-4">
+                <img id="photo-preview" src="" alt="" class="hidden h-16 w-16 rounded-lg object-cover border border-stone-200">
+                <label class="cursor-pointer rounded-lg border border-stone-300 bg-white px-4 py-2 text-sm text-stone-700 hover:bg-stone-50 transition-colors">
+                    Choose photo
+                    <input type="file" id="photo-input" name="photo" accept="image/*" class="sr-only">
+                </label>
+                <span id="photo-filename" class="text-sm text-stone-400">No file chosen</span>
+            </div>
+        </div>
+
+        <div class="sm:col-span-2">
+            <p class="text-sm font-medium text-stone-700 mb-2">Special needs</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-2">
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="needs_medical" value="1" <?= !empty($old['needs_medical']) ? 'checked' : '' ?> class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Medical case
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="needs_behavior" value="1" <?= !empty($old['needs_behavior']) ? 'checked' : '' ?> class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Behavior case
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="needs_fenced_yard" value="1" <?= !empty($old['needs_fenced_yard']) ? 'checked' : '' ?> class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Requires fenced yard
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="no_other_dogs" value="1" <?= !empty($old['no_other_dogs']) ? 'checked' : '' ?> class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    No other dogs
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="no_dogs" value="1" <?= !empty($old['no_dogs']) ? 'checked' : '' ?> class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    No dogs
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="no_cats" value="1" <?= !empty($old['no_cats']) ? 'checked' : '' ?> class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    No cats
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="no_other_cats" value="1" <?= !empty($old['no_other_cats']) ? 'checked' : '' ?> class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    No other cats
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="no_kids" value="1" <?= !empty($old['no_kids']) ? 'checked' : '' ?> class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    No kids
+                </label>
+            </div>
+        </div>
+
+        <div class="sm:col-span-2">
+            <p class="text-sm font-medium text-stone-700 mb-2">Other needs</p>
+            <div class="flex items-center gap-2 max-w-xs">
+                <div class="relative flex-1">
+                    <input type="text" id="custom-need-input" placeholder="e.g. Crippled, blind in one eye…"
+                        class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 pr-9 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+                    <button type="button" id="custom-need-add"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 hover:text-orange-600 transition-colors text-lg leading-none">&#8594;</button>
+                </div>
+            </div>
+            <div id="custom-needs-tags" class="flex flex-wrap gap-1.5 mt-2"></div>
+            <div id="custom-needs-inputs"></div>
         </div>
 
         <div class="sm:col-span-2">
@@ -97,6 +155,74 @@
         </a>
     </div>
 </form>
+
+<script>
+(function () {
+    var tags     = [];
+    var tagsEl   = document.getElementById('custom-needs-tags');
+    var inputsEl = document.getElementById('custom-needs-inputs');
+    var input    = document.getElementById('custom-need-input');
+    var addBtn   = document.getElementById('custom-need-add');
+
+    function render() {
+        tagsEl.innerHTML   = '';
+        inputsEl.innerHTML = '';
+        tags.forEach(function (val) {
+            var tag = document.createElement('span');
+            tag.className = 'inline-flex items-center gap-1 rounded-full bg-stone-100 border border-stone-300 text-stone-700 text-xs font-medium px-3 py-1';
+            tag.innerHTML = '<span>' + esc(val) + '</span><button type="button" class="ml-1 leading-none hover:text-red-500 text-base">&times;</button>';
+            tag.querySelector('button').addEventListener('click', function () { remove(val); });
+            tagsEl.appendChild(tag);
+            var hidden = document.createElement('input');
+            hidden.type  = 'hidden';
+            hidden.name  = 'custom_needs[]';
+            hidden.value = val;
+            inputsEl.appendChild(hidden);
+        });
+    }
+
+    function esc(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function add() {
+        var val = input.value.trim();
+        if (!val || tags.indexOf(val) !== -1) return;
+        tags.push(val);
+        input.value = '';
+        render();
+    }
+
+    function remove(val) {
+        tags = tags.filter(function (v) { return v !== val; });
+        render();
+    }
+
+    addBtn.addEventListener('click', add);
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); add(); }
+    });
+})();
+</script>
+
+<script>
+(function () {
+    var input   = document.getElementById('photo-input');
+    var preview = document.getElementById('photo-preview');
+    var label   = document.getElementById('photo-filename');
+    input.addEventListener('change', function () {
+        var file = this.files[0];
+        if (!file) return;
+        label.textContent = file.name;
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    });
+})();
+</script>
 
 <script>
 (function () {

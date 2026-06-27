@@ -21,10 +21,28 @@
         <h2 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-4">Details</h2>
         <div class="flex justify-between"><span class="text-stone-400">ZIP</span><span class="text-stone-700"><?= esc($foster['area_zip'] ?: '—') ?></span></div>
         <div class="flex justify-between"><span class="text-stone-400">Accepts</span><span class="text-stone-700 capitalize"><?= esc($foster['species_accepted']) ?></span></div>
-        <div class="flex justify-between"><span class="text-stone-400">Size preference</span><span class="text-stone-700"><?= esc($foster['size_preference'] ?: '—') ?></span></div>
         <div class="flex justify-between"><span class="text-stone-400">Max capacity</span><span class="text-stone-700"><?= esc($foster['max_capacity']) ?></span></div>
-        <div class="flex justify-between"><span class="text-stone-400">Kids in home</span><span class="text-stone-700"><?= $foster['has_kids'] ? 'Yes' : 'No' ?></span></div>
-        <div class="flex justify-between"><span class="text-stone-400">Other pets</span><span class="text-stone-700"><?= $foster['has_other_pets'] ? 'Yes' : 'No' ?></span></div>
+        <?php
+            $sizes = [];
+            if ($foster['ok_small'])  $sizes[] = 'Small';
+            if ($foster['ok_medium']) $sizes[] = 'Medium';
+            if ($foster['ok_large'])  $sizes[] = 'Large';
+            if ($foster['ok_xlarge']) $sizes[] = 'Extra Large';
+        ?>
+        <div class="flex justify-between items-start gap-4"><span class="text-stone-400 shrink-0">Size preferences</span><span class="text-stone-700 text-right"><?= $sizes ? esc(implode(', ', $sizes)) : '—' ?></span></div>
+        <?php
+            $prefs = [];
+            if ($foster['ok_puppies'])      $prefs[] = 'Puppies';
+            if ($foster['ok_kittens'])      $prefs[] = 'Kittens';
+            if ($foster['ok_medical'])      $prefs[] = 'Medical cases';
+            if ($foster['ok_behavior'])     $prefs[] = 'Behavior cases';
+            if ($foster['has_fenced_yard']) $prefs[] = 'Fenced yard';
+            if ($foster['has_kids'])        $prefs[] = 'Has kids in home';
+            if ($foster['has_other_pets'])  $prefs[] = 'Has other pets';
+            $custom = $foster['custom_can_handle'] ? json_decode($foster['custom_can_handle'], true) ?? [] : [];
+            $allPrefs = array_merge($prefs, $custom);
+        ?>
+        <div class="flex justify-between items-start gap-4"><span class="text-stone-400 shrink-0">Can handle</span><span class="text-stone-700 text-right"><?= $allPrefs ? esc(implode(', ', $allPrefs)) : '—' ?></span></div>
         <?php if ($foster['notes']): ?>
         <div class="pt-3 border-t border-stone-100 text-stone-600 text-xs leading-relaxed"><?= esc($foster['notes']) ?></div>
         <?php endif ?>

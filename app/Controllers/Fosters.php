@@ -12,9 +12,10 @@ class Fosters extends BaseController
         $model = new FosterHome();
         $placementModel = new Placement();
 
-        $q       = trim((string) $this->request->getGet('q'));
-        $species = $this->request->getGet('species');
-        $status  = $this->request->getGet('status');
+        $q          = trim((string) $this->request->getGet('q'));
+        $species    = $this->request->getGet('species');
+        $status     = $this->request->getGet('status');
+        $can_handle = array_filter((array) ($this->request->getGet('can_handle') ?? []));
 
         if ($q !== '') {
             $model->groupStart()
@@ -29,6 +30,16 @@ class Fosters extends BaseController
         if ($status) {
             $model->where('status', $status);
         }
+        $validPrefs = ['ok_puppies', 'ok_kittens', 'ok_medical', 'ok_large_dogs', 'ok_behavior', 'has_fenced_yard'];
+        foreach ($can_handle as $pref) {
+            if ($pref === 'no_other_pets') {
+                $model->where('has_other_pets', 0);
+            } elseif ($pref === 'no_kids') {
+                $model->where('has_kids', 0);
+            } elseif (in_array($pref, $validPrefs)) {
+                $model->where($pref, 1);
+            }
+        }
 
         $fosters = $model->orderBy('name')->findAll();
 
@@ -38,7 +49,7 @@ class Fosters extends BaseController
 
         return view('fosters/index', [
             'fosters' => $fosters,
-            'filters' => compact('q', 'species', 'status'),
+            'filters' => compact('q', 'species', 'status', 'can_handle'),
         ]);
     }
 
@@ -59,10 +70,20 @@ class Fosters extends BaseController
             'species_accepted' => $this->request->getPost('species_accepted'),
             'size_preference'  => $this->request->getPost('size_preference'),
             'max_capacity'     => (int) $this->request->getPost('max_capacity'),
-            'has_kids'         => $this->request->getPost('has_kids') ? 1 : 0,
-            'has_other_pets'   => $this->request->getPost('has_other_pets') ? 1 : 0,
-            'status'           => $this->request->getPost('status') ?? 'active',
-            'notes'            => $this->request->getPost('notes'),
+            'has_kids'          => $this->request->getPost('has_kids') ? 1 : 0,
+            'has_other_pets'    => $this->request->getPost('has_other_pets') ? 1 : 0,
+            'status'            => $this->request->getPost('status') ?? 'active',
+            'notes'             => $this->request->getPost('notes'),
+            'ok_small'          => $this->request->getPost('ok_small') ? 1 : 0,
+            'ok_medium'         => $this->request->getPost('ok_medium') ? 1 : 0,
+            'ok_large'          => $this->request->getPost('ok_large') ? 1 : 0,
+            'ok_xlarge'         => $this->request->getPost('ok_xlarge') ? 1 : 0,
+            'ok_puppies'        => $this->request->getPost('ok_puppies') ? 1 : 0,
+            'ok_kittens'        => $this->request->getPost('ok_kittens') ? 1 : 0,
+            'ok_medical'        => $this->request->getPost('ok_medical') ? 1 : 0,
+            'ok_behavior'       => $this->request->getPost('ok_behavior') ? 1 : 0,
+            'has_fenced_yard'   => $this->request->getPost('has_fenced_yard') ? 1 : 0,
+            'custom_can_handle' => $this->encodeCustomCanHandle(),
         ];
 
         if (!$model->insert($data)) {
@@ -126,10 +147,20 @@ class Fosters extends BaseController
             'species_accepted' => $this->request->getPost('species_accepted'),
             'size_preference'  => $this->request->getPost('size_preference'),
             'max_capacity'     => (int) $this->request->getPost('max_capacity'),
-            'has_kids'         => $this->request->getPost('has_kids') ? 1 : 0,
-            'has_other_pets'   => $this->request->getPost('has_other_pets') ? 1 : 0,
-            'status'           => $this->request->getPost('status'),
-            'notes'            => $this->request->getPost('notes'),
+            'has_kids'          => $this->request->getPost('has_kids') ? 1 : 0,
+            'has_other_pets'    => $this->request->getPost('has_other_pets') ? 1 : 0,
+            'status'            => $this->request->getPost('status'),
+            'notes'             => $this->request->getPost('notes'),
+            'ok_small'          => $this->request->getPost('ok_small') ? 1 : 0,
+            'ok_medium'         => $this->request->getPost('ok_medium') ? 1 : 0,
+            'ok_large'          => $this->request->getPost('ok_large') ? 1 : 0,
+            'ok_xlarge'         => $this->request->getPost('ok_xlarge') ? 1 : 0,
+            'ok_puppies'        => $this->request->getPost('ok_puppies') ? 1 : 0,
+            'ok_kittens'        => $this->request->getPost('ok_kittens') ? 1 : 0,
+            'ok_medical'        => $this->request->getPost('ok_medical') ? 1 : 0,
+            'ok_behavior'       => $this->request->getPost('ok_behavior') ? 1 : 0,
+            'has_fenced_yard'   => $this->request->getPost('has_fenced_yard') ? 1 : 0,
+            'custom_can_handle' => $this->encodeCustomCanHandle(),
         ];
 
         if (!$model->update($id, $data)) {
@@ -142,6 +173,12 @@ class Fosters extends BaseController
         }
 
         return redirect()->to('/fosters/' . $id)->with('success', 'Foster home updated.');
+    }
+
+    private function encodeCustomCanHandle(): ?string
+    {
+        $items = array_values(array_filter(array_map('trim', (array) ($this->request->getPost('custom_can_handle') ?? []))));
+        return !empty($items) ? json_encode($items) : null;
     }
 
     public function updateStatus($id)

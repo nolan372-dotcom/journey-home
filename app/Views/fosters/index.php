@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<?php $anyFilter = ($filters['q'] !== '' || $filters['species'] || $filters['status']); ?>
+<?php $anyFilter = ($filters['q'] !== '' || $filters['species'] || $filters['status'] || !empty($filters['can_handle'])); ?>
 
 <div class="flex items-center justify-between mb-5">
     <h1 class="text-xl font-semibold text-stone-900">Foster Homes</h1>
@@ -10,33 +10,112 @@
     </a>
 </div>
 
-<form method="get" action="/fosters" class="mb-5 flex flex-wrap gap-2">
-    <input type="text" name="q" value="<?= esc($filters['q']) ?>" placeholder="Search name, email or phone…"
-        class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 w-56">
+<form method="get" action="/fosters" id="foster-filter-form" class="mb-5">
+    <div class="flex flex-wrap gap-2">
+        <input type="text" name="q" value="<?= esc($filters['q']) ?>" placeholder="Search name, email or phone…"
+            class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 w-56">
 
-    <select name="species" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
-        <option value="">All species</option>
-        <option value="both" <?= $filters['species'] === 'both' ? 'selected' : '' ?>>Dogs &amp; Cats</option>
-        <option value="dog"  <?= $filters['species'] === 'dog'  ? 'selected' : '' ?>>Dogs only</option>
-        <option value="cat"  <?= $filters['species'] === 'cat'  ? 'selected' : '' ?>>Cats only</option>
-    </select>
+        <select name="species" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+            <option value="">All species</option>
+            <option value="both" <?= $filters['species'] === 'both' ? 'selected' : '' ?>>Dogs &amp; Cats</option>
+            <option value="dog"  <?= $filters['species'] === 'dog'  ? 'selected' : '' ?>>Dogs only</option>
+            <option value="cat"  <?= $filters['species'] === 'cat'  ? 'selected' : '' ?>>Cats only</option>
+        </select>
 
-    <select name="status" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
-        <option value="">All statuses</option>
-        <option value="active"   <?= $filters['status'] === 'active'   ? 'selected' : '' ?>>Active</option>
-        <option value="paused"   <?= $filters['status'] === 'paused'   ? 'selected' : '' ?>>Paused</option>
-        <option value="inactive" <?= $filters['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
-    </select>
+        <select name="status" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+            <option value="">All statuses</option>
+            <option value="active"   <?= $filters['status'] === 'active'   ? 'selected' : '' ?>>Active</option>
+            <option value="paused"   <?= $filters['status'] === 'paused'   ? 'selected' : '' ?>>Paused</option>
+            <option value="inactive" <?= $filters['status'] === 'inactive' ? 'selected' : '' ?>>Inactive</option>
+        </select>
 
-    <button type="submit" class="rounded-lg bg-stone-800 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 transition-colors">
-        Search
-    </button>
-    <?php if ($anyFilter): ?>
-    <a href="/fosters" class="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-500 hover:bg-stone-50 transition-colors">
-        Clear
-    </a>
-    <?php endif ?>
+        <select id="criteria-select" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+            <option value="">Add criteria…</option>
+            <option value="ok_puppies">Puppies</option>
+            <option value="ok_kittens">Kittens</option>
+            <option value="ok_large_dogs">Large dogs</option>
+            <option value="ok_medical">Medical cases</option>
+            <option value="ok_behavior">Behavior cases</option>
+            <option value="has_fenced_yard">Fenced yard</option>
+            <option value="no_other_pets">No other pets</option>
+            <option value="no_kids">No kids</option>
+        </select>
+
+        <button type="submit" class="rounded-lg bg-stone-800 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 transition-colors">
+            Search
+        </button>
+        <?php if ($anyFilter): ?>
+        <a href="/fosters" class="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-500 hover:bg-stone-50 transition-colors">
+            Clear
+        </a>
+        <?php endif ?>
+    </div>
+
+    <div id="criteria-tags" class="flex flex-wrap gap-1.5 mt-2"></div>
+    <div id="criteria-inputs"></div>
 </form>
+
+<script>
+(function () {
+    var LABELS = {
+        'ok_puppies':    'Puppies',
+        'ok_kittens':    'Kittens',
+        'ok_large_dogs': 'Large dogs',
+        'ok_medical':    'Medical cases',
+        'ok_behavior':   'Behavior cases',
+        'has_fenced_yard': 'Fenced yard',
+        'no_other_pets': 'No other pets',
+        'no_kids':       'No kids',
+    };
+
+    var selected = <?= json_encode(array_values($filters['can_handle'])) ?>;
+
+    var tagsEl   = document.getElementById('criteria-tags');
+    var inputsEl = document.getElementById('criteria-inputs');
+    var selectEl = document.getElementById('criteria-select');
+
+    function render() {
+        tagsEl.innerHTML   = '';
+        inputsEl.innerHTML = '';
+
+        selected.forEach(function (val) {
+            var tag = document.createElement('span');
+            tag.className = 'inline-flex items-center gap-1 rounded-full bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1';
+            tag.innerHTML =
+                '<span>' + (LABELS[val] || val) + '</span>' +
+                '<button type="button" class="ml-1 leading-none hover:text-orange-600 text-base" data-val="' + val + '">&times;</button>';
+            tag.querySelector('button').addEventListener('click', function () {
+                remove(this.dataset.val);
+            });
+            tagsEl.appendChild(tag);
+
+            var hidden = document.createElement('input');
+            hidden.type  = 'hidden';
+            hidden.name  = 'can_handle[]';
+            hidden.value = val;
+            inputsEl.appendChild(hidden);
+        });
+    }
+
+    function add(val) {
+        if (!val || selected.indexOf(val) !== -1) return;
+        selected.push(val);
+        render();
+    }
+
+    function remove(val) {
+        selected = selected.filter(function (v) { return v !== val; });
+        render();
+    }
+
+    selectEl.addEventListener('change', function () {
+        add(this.value);
+        this.value = '';
+    });
+
+    render();
+})();
+</script>
 
 <?php if (empty($fosters)): ?>
     <div class="rounded-lg border border-stone-200 bg-white px-5 py-10 text-center">

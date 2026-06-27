@@ -57,11 +57,6 @@
             </select>
         </div>
 
-        <div>
-            <label for="f-size" class="block text-sm font-medium text-stone-700 mb-1.5">Size Preference</label>
-            <input type="text" id="f-size" name="size_preference" value="<?= esc($old['size_preference'] ?? '') ?>" placeholder="e.g. small, medium"
-                class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
-        </div>
 
         <div>
             <label for="f-status" class="block text-sm font-medium text-stone-700 mb-1.5">Status</label>
@@ -72,17 +67,85 @@
             </select>
         </div>
 
-        <div class="sm:col-span-2 flex gap-6 pt-1">
-            <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
-                <input type="checkbox" id="f-kids" name="has_kids" value="1" <?= !empty($old['has_kids']) ? 'checked' : '' ?>
-                    class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
-                Has kids in home
-            </label>
-            <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
-                <input type="checkbox" id="f-pets" name="has_other_pets" value="1" <?= !empty($old['has_other_pets']) ? 'checked' : '' ?>
-                    class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
-                Has other pets
-            </label>
+        <div class="sm:col-span-2">
+            <p class="text-sm font-medium text-stone-700 mb-2">Size Preferences</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-2">
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="ok_small" value="1" <?= !empty($old['ok_small']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Small
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="ok_medium" value="1" <?= !empty($old['ok_medium']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Medium
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="ok_large" value="1" <?= !empty($old['ok_large']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Large
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="ok_xlarge" value="1" <?= !empty($old['ok_xlarge']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Extra Large
+                </label>
+            </div>
+        </div>
+
+        <div class="sm:col-span-2">
+            <p class="text-sm font-medium text-stone-700 mb-2">Can handle</p>
+            <div class="flex flex-wrap gap-x-6 gap-y-2">
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="ok_puppies" value="1" <?= !empty($old['ok_puppies']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Puppies
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="ok_kittens" value="1" <?= !empty($old['ok_kittens']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Kittens
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="ok_medical" value="1" <?= !empty($old['ok_medical']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Medical cases
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="ok_behavior" value="1" <?= !empty($old['ok_behavior']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Behavior cases
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" name="has_fenced_yard" value="1" <?= !empty($old['has_fenced_yard']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Fenced yard
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" id="f-kids" name="has_kids" value="1" <?= !empty($old['has_kids']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Has kids in home
+                </label>
+                <label class="flex items-center gap-2 text-sm text-stone-700 cursor-pointer">
+                    <input type="checkbox" id="f-pets" name="has_other_pets" value="1" <?= !empty($old['has_other_pets']) ? 'checked' : '' ?>
+                        class="rounded border-stone-300 text-orange-600 focus:ring-orange-500">
+                    Has other pets
+                </label>
+            </div>
+        </div>
+
+        <div class="sm:col-span-2">
+            <p class="text-sm font-medium text-stone-700 mb-2">Other things they can handle</p>
+            <div class="flex items-center gap-2 max-w-xs">
+                <div class="relative flex-1">
+                    <input type="text" id="custom-handle-input" placeholder="e.g. Diabetic, bottle fed…"
+                        class="w-full rounded-lg border border-stone-300 bg-white px-3 py-2 pr-9 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+                    <button type="button" id="custom-handle-add"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 text-stone-400 hover:text-orange-600 transition-colors text-lg leading-none">&#8594;</button>
+                </div>
+            </div>
+            <div id="custom-handle-tags" class="flex flex-wrap gap-1.5 mt-2"></div>
+            <div id="custom-handle-inputs"></div>
         </div>
 
         <div class="sm:col-span-2">
@@ -101,5 +164,54 @@
         </a>
     </div>
 </form>
+
+<script>
+(function () {
+    var tags     = [];
+    var tagsEl   = document.getElementById('custom-handle-tags');
+    var inputsEl = document.getElementById('custom-handle-inputs');
+    var input    = document.getElementById('custom-handle-input');
+    var addBtn   = document.getElementById('custom-handle-add');
+
+    function render() {
+        tagsEl.innerHTML   = '';
+        inputsEl.innerHTML = '';
+        tags.forEach(function (val) {
+            var tag = document.createElement('span');
+            tag.className = 'inline-flex items-center gap-1 rounded-full bg-stone-100 border border-stone-300 text-stone-700 text-xs font-medium px-3 py-1';
+            tag.innerHTML = '<span>' + esc(val) + '</span><button type="button" class="ml-1 leading-none hover:text-red-500 text-base">&times;</button>';
+            tag.querySelector('button').addEventListener('click', function () { remove(val); });
+            tagsEl.appendChild(tag);
+            var hidden = document.createElement('input');
+            hidden.type  = 'hidden';
+            hidden.name  = 'custom_can_handle[]';
+            hidden.value = val;
+            inputsEl.appendChild(hidden);
+        });
+    }
+
+    function esc(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function add() {
+        var val = input.value.trim();
+        if (!val || tags.indexOf(val) !== -1) return;
+        tags.push(val);
+        input.value = '';
+        render();
+    }
+
+    function remove(val) {
+        tags = tags.filter(function (v) { return v !== val; });
+        render();
+    }
+
+    addBtn.addEventListener('click', add);
+    input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); add(); }
+    });
+})();
+</script>
 
 <?= $this->endSection() ?>

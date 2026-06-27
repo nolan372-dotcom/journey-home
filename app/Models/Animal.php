@@ -12,6 +12,9 @@ class Animal extends Model
     protected $allowedFields = [
         'name', 'species', 'breed', 'age_group', 'size',
         'intake_date', 'status', 'notes', 'photo_url', 'archived',
+        'needs_medical', 'needs_behavior', 'needs_fenced_yard',
+        'no_other_dogs', 'no_dogs', 'no_cats', 'no_other_cats', 'no_kids',
+        'custom_needs',
     ];
 
     protected $useTimestamps = true;

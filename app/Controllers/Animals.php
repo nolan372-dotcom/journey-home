@@ -13,7 +13,7 @@ class Animals extends BaseController
 
         $q         = trim((string) $this->request->getGet('q'));
         $species   = $this->request->getGet('species');
-        $size      = $this->request->getGet('size');
+        $size      = array_filter((array) ($this->request->getGet('size') ?? []));
         $status    = $this->request->getGet('status');
         $dateFrom  = $this->request->getGet('date_from');
         $dateTo    = $this->request->getGet('date_to');
@@ -29,8 +29,8 @@ class Animals extends BaseController
         if ($species) {
             $model->where('species', $species);
         }
-        if ($size) {
-            $model->where('size', $size);
+        if (!empty($size)) {
+            $model->whereIn('size', $size);
         }
         if ($status) {
             $model->where('status', $status);
@@ -66,9 +66,18 @@ class Animals extends BaseController
             'age_group'   => $this->request->getPost('age_group'),
             'size'        => $this->request->getPost('size'),
             'intake_date' => $this->request->getPost('intake_date'),
-            'status'      => $this->request->getPost('status') ?? 'needs_foster',
-            'notes'       => $this->request->getPost('notes') ?: null,
-            'photo_url'   => $this->request->getPost('photo_url') ?: null,
+            'status'            => $this->request->getPost('status') ?? 'needs_foster',
+            'notes'             => $this->request->getPost('notes') ?: null,
+            'photo_url'         => $this->uploadPhoto(),
+            'needs_medical'     => $this->request->getPost('needs_medical') ? 1 : 0,
+            'needs_behavior'    => $this->request->getPost('needs_behavior') ? 1 : 0,
+            'needs_fenced_yard' => $this->request->getPost('needs_fenced_yard') ? 1 : 0,
+            'no_other_dogs'     => $this->request->getPost('no_other_dogs') ? 1 : 0,
+            'no_dogs'           => $this->request->getPost('no_dogs') ? 1 : 0,
+            'no_cats'           => $this->request->getPost('no_cats') ? 1 : 0,
+            'no_other_cats'     => $this->request->getPost('no_other_cats') ? 1 : 0,
+            'no_kids'           => $this->request->getPost('no_kids') ? 1 : 0,
+            'custom_needs'      => $this->encodeCustomNeeds(),
         ];
 
         if (!$model->insert($data)) {
@@ -131,9 +140,18 @@ class Animals extends BaseController
             'age_group'   => $this->request->getPost('age_group'),
             'size'        => $this->request->getPost('size'),
             'intake_date' => $this->request->getPost('intake_date'),
-            'status'      => $this->request->getPost('status'),
-            'notes'       => $this->request->getPost('notes') ?: null,
-            'photo_url'   => $this->request->getPost('photo_url') ?: null,
+            'status'            => $this->request->getPost('status'),
+            'notes'             => $this->request->getPost('notes') ?: null,
+            'photo_url'         => $this->uploadPhoto($animal['photo_url']),
+            'needs_medical'     => $this->request->getPost('needs_medical') ? 1 : 0,
+            'needs_behavior'    => $this->request->getPost('needs_behavior') ? 1 : 0,
+            'needs_fenced_yard' => $this->request->getPost('needs_fenced_yard') ? 1 : 0,
+            'no_other_dogs'     => $this->request->getPost('no_other_dogs') ? 1 : 0,
+            'no_dogs'           => $this->request->getPost('no_dogs') ? 1 : 0,
+            'no_cats'           => $this->request->getPost('no_cats') ? 1 : 0,
+            'no_other_cats'     => $this->request->getPost('no_other_cats') ? 1 : 0,
+            'no_kids'           => $this->request->getPost('no_kids') ? 1 : 0,
+            'custom_needs'      => $this->encodeCustomNeeds(),
         ];
 
         if (!$model->update($id, $data)) {
@@ -146,6 +164,26 @@ class Animals extends BaseController
         }
 
         return redirect()->to('/animals/' . $id)->with('success', 'Animal updated.');
+    }
+
+    private function encodeCustomNeeds(): ?string
+    {
+        $items = array_values(array_filter(array_map('trim', (array) ($this->request->getPost('custom_needs') ?? []))));
+        return !empty($items) ? json_encode($items) : null;
+    }
+
+    private function uploadPhoto(?string $existing = null): ?string
+    {
+        $file = $this->request->getFile('photo');
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (in_array($file->getMimeType(), $allowed)) {
+                $name = $file->getRandomName();
+                $file->move(FCPATH . 'uploads/animals', $name);
+                return '/uploads/animals/' . $name;
+            }
+        }
+        return $existing;
     }
 
     public function archive($id)

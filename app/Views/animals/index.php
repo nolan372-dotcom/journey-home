@@ -12,7 +12,7 @@
 <?= $this->section('content') ?>
 
 <?php
-    $anyFilter = ($filters['q'] !== '' || $filters['species'] || $filters['size'] || $filters['status'] || $filters['dateFrom'] || $filters['dateTo']);
+    $anyFilter = ($filters['q'] !== '' || $filters['species'] || !empty($filters['size']) || $filters['status'] || $filters['dateFrom'] || $filters['dateTo']);
 ?>
 
 <div class="flex items-center justify-between mb-5">
@@ -22,48 +22,104 @@
     </a>
 </div>
 
-<form method="get" action="/animals" class="mb-5 flex flex-wrap gap-2">
-    <input type="text" name="q" value="<?= esc($filters['q']) ?>" placeholder="Search name or breed…"
-        class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 w-48">
+<form method="get" action="/animals" id="animal-filter-form" class="mb-5">
+    <div class="flex flex-wrap gap-2">
+        <input type="text" name="q" value="<?= esc($filters['q']) ?>" placeholder="Search name or breed…"
+            class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 w-48">
 
-    <select name="species" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
-        <option value="">All species</option>
-        <option value="dog"   <?= $filters['species'] === 'dog'   ? 'selected' : '' ?>>Dog</option>
-        <option value="cat"   <?= $filters['species'] === 'cat'   ? 'selected' : '' ?>>Cat</option>
-        <option value="other" <?= $filters['species'] === 'other' ? 'selected' : '' ?>>Other</option>
-    </select>
+        <select name="species" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+            <option value="">All species</option>
+            <option value="dog"   <?= $filters['species'] === 'dog'   ? 'selected' : '' ?>>Dog</option>
+            <option value="cat"   <?= $filters['species'] === 'cat'   ? 'selected' : '' ?>>Cat</option>
+            <option value="other" <?= $filters['species'] === 'other' ? 'selected' : '' ?>>Other</option>
+        </select>
 
-    <select name="size" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
-        <option value="">All sizes</option>
-        <option value="small"   <?= $filters['size'] === 'small'   ? 'selected' : '' ?>>Small</option>
-        <option value="medium"  <?= $filters['size'] === 'medium'  ? 'selected' : '' ?>>Medium</option>
-        <option value="large"   <?= $filters['size'] === 'large'   ? 'selected' : '' ?>>Large</option>
-        <option value="x-large" <?= $filters['size'] === 'x-large' ? 'selected' : '' ?>>Extra Large</option>
-    </select>
+        <select id="size-select" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+            <option value="">Add size…</option>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+            <option value="x-large">Extra Large</option>
+        </select>
 
-    <select name="status" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
-        <option value="">All statuses</option>
-        <option value="needs_foster" <?= $filters['status'] === 'needs_foster' ? 'selected' : '' ?>>Needs foster</option>
-        <option value="in_foster"    <?= $filters['status'] === 'in_foster'    ? 'selected' : '' ?>>In foster</option>
-        <option value="adopted"      <?= $filters['status'] === 'adopted'      ? 'selected' : '' ?>>Adopted</option>
-    </select>
+        <select name="status" class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400">
+            <option value="">All statuses</option>
+            <option value="needs_foster" <?= $filters['status'] === 'needs_foster' ? 'selected' : '' ?>>Needs foster</option>
+            <option value="in_foster"    <?= $filters['status'] === 'in_foster'    ? 'selected' : '' ?>>In foster</option>
+            <option value="adopted"      <?= $filters['status'] === 'adopted'      ? 'selected' : '' ?>>Adopted</option>
+        </select>
 
-    <div class="relative">
-        <input type="text" id="date-range-picker" placeholder="Intake date range…" readonly
-            class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 w-52 cursor-pointer">
-        <input type="hidden" name="date_from" id="filter-date-from" value="<?= esc($filters['dateFrom']) ?>">
-        <input type="hidden" name="date_to"   id="filter-date-to"   value="<?= esc($filters['dateTo']) ?>">
+        <div class="relative">
+            <input type="text" id="date-range-picker" placeholder="Intake date range…" readonly
+                class="rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 w-52 cursor-pointer">
+            <input type="hidden" name="date_from" id="filter-date-from" value="<?= esc($filters['dateFrom']) ?>">
+            <input type="hidden" name="date_to"   id="filter-date-to"   value="<?= esc($filters['dateTo']) ?>">
+        </div>
+
+        <button type="submit" class="rounded-lg bg-stone-800 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 transition-colors">
+            Search
+        </button>
+        <a href="/animals" class="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-500 hover:bg-stone-50 transition-colors">
+            Clear
+        </a>
     </div>
 
-    <button type="submit" class="rounded-lg bg-stone-800 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700 transition-colors">
-        Search
-    </button>
-    <?php if ($anyFilter): ?>
-    <a href="/animals" class="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-500 hover:bg-stone-50 transition-colors">
-        Clear
-    </a>
-    <?php endif ?>
+    <div id="size-tags" class="flex flex-wrap gap-1.5 mt-2"></div>
+    <div id="size-inputs"></div>
 </form>
+
+<script>
+(function () {
+    var LABELS = { 'small': 'Small', 'medium': 'Medium', 'large': 'Large', 'x-large': 'Extra Large' };
+
+    var selected = <?= json_encode(array_values($filters['size'])) ?>;
+
+    var tagsEl   = document.getElementById('size-tags');
+    var inputsEl = document.getElementById('size-inputs');
+    var selectEl = document.getElementById('size-select');
+
+    function render() {
+        tagsEl.innerHTML   = '';
+        inputsEl.innerHTML = '';
+
+        selected.forEach(function (val) {
+            var tag = document.createElement('span');
+            tag.className = 'inline-flex items-center gap-1 rounded-full bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1';
+            tag.innerHTML =
+                '<span>' + (LABELS[val] || val) + '</span>' +
+                '<button type="button" class="ml-1 leading-none hover:text-orange-600 text-base" data-val="' + val + '">&times;</button>';
+            tag.querySelector('button').addEventListener('click', function () {
+                remove(this.dataset.val);
+            });
+            tagsEl.appendChild(tag);
+
+            var hidden = document.createElement('input');
+            hidden.type  = 'hidden';
+            hidden.name  = 'size[]';
+            hidden.value = val;
+            inputsEl.appendChild(hidden);
+        });
+    }
+
+    function add(val) {
+        if (!val || selected.indexOf(val) !== -1) return;
+        selected.push(val);
+        render();
+    }
+
+    function remove(val) {
+        selected = selected.filter(function (v) { return v !== val; });
+        render();
+    }
+
+    selectEl.addEventListener('change', function () {
+        add(this.value);
+        this.value = '';
+    });
+
+    render();
+})();
+</script>
 
 <?php if (empty($animals)): ?>
     <div class="rounded-lg border border-stone-200 bg-white px-5 py-10 text-center">
